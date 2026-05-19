@@ -239,6 +239,8 @@
                         ['name' => 'Testimonials', 'icon' => 'message-square', 'route' => 'admin.testimonials.index'],
                         ['name' => 'Certifications', 'icon' => 'award', 'route' => 'admin.certifications.index'],
                         ['name' => 'Our Team', 'icon' => 'users', 'route' => 'admin.team.index'],
+                        ['name' => 'Job Openings', 'icon' => 'clipboard-list', 'route' => 'admin.careers.index'],
+                        ['name' => 'Job Applications', 'icon' => 'file-badge', 'route' => 'admin.applications.index', 'badge_apps' => true],
                         ['name' => 'Inbox Submissions', 'icon' => 'mail', 'route' => 'admin.contact.index', 'badge' => true],
                         ['name' => 'Company Settings', 'icon' => 'settings', 'route' => 'admin.settings.edit'],
                     ];
@@ -252,7 +254,7 @@
                     @endphp
                     <a href="{{ route($item['route']) }}" 
                        class="flex items-center gap-4 px-4 py-3 rounded-lg text-sm font-medium transition-all group relative {{ $isActive ? 'bg-accent text-primary font-semibold' : 'text-white/70 hover:bg-white/5 hover:text-white' }}">
-                        <i data-lucide="{{ $item['icon'] }}" class="w-5 h-5 flex-shrink-0 {{ $isActive ? 'text-primary' : 'text-white/60 group-hover:text-white' }}"></i>
+                       <i data-lucide="{{ $item['icon'] }}" class="w-5 h-5 flex-shrink-0 {{ $isActive ? 'text-primary' : 'text-white/60 group-hover:text-white' }}"></i>
                         
                         <span class="transition-opacity duration-300" :class="(sidebarOpen || mobileSidebarOpen) ? 'opacity-100' : 'opacity-0 lg:w-0 pointer-events-none'">
                             {{ $item['name'] }}
@@ -266,6 +268,18 @@
                                 <span class="absolute right-4 px-2 py-0.5 rounded-full text-[10px] bg-red-500 text-white font-bold transition-all"
                                       :class="(sidebarOpen || mobileSidebarOpen) ? 'opacity-100' : 'opacity-0 scale-0 pointer-events-none'">
                                     {{ $unreadCount }}
+                                </span>
+                            @endif
+                        @endif
+
+                        @if(isset($item['badge_apps']))
+                            @php
+                                $unreadAppsCount = \App\Models\JobApplication::where('status', 'new')->count();
+                            @endphp
+                            @if($unreadAppsCount > 0)
+                                <span class="absolute right-4 px-2 py-0.5 rounded-full text-[10px] bg-red-500 text-white font-bold transition-all"
+                                      :class="(sidebarOpen || mobileSidebarOpen) ? 'opacity-100' : 'opacity-0 scale-0 pointer-events-none'">
+                                    {{ $unreadAppsCount }}
                                 </span>
                             @endif
                         @endif

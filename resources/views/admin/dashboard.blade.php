@@ -20,7 +20,7 @@
     </div>
 
     <!-- Quick Stats Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
         <!-- Projects Card -->
         <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex items-center gap-5 hover:shadow-md transition-shadow">
             <div class="w-12 h-12 rounded-lg bg-blue-50 text-[#0f2343] flex items-center justify-center flex-shrink-0 border border-blue-100">
@@ -52,6 +52,34 @@
                 <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Client Reviews</div>
                 <div class="text-3xl font-bold text-slate-800 mt-1">{{ $stats['testimonials'] }}</div>
             </div>
+        </div>
+
+        <!-- Job Openings Card -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex items-center gap-5 hover:shadow-md transition-shadow">
+            <div class="w-12 h-12 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center flex-shrink-0 border border-indigo-100">
+                <i data-lucide="clipboard-list" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Job Openings</div>
+                <div class="text-3xl font-bold text-slate-800 mt-1">{{ $stats['job_openings'] }}</div>
+            </div>
+        </div>
+
+        <!-- Job Applications Card -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex items-center gap-5 hover:shadow-md transition-shadow relative overflow-hidden">
+            <div class="w-12 h-12 rounded-lg {{ $stats['unread_applications'] > 0 ? 'bg-rose-50 text-rose-600 border-rose-100' : 'bg-slate-50 text-slate-400 border-slate-100' }} flex items-center justify-center flex-shrink-0 border">
+                <i data-lucide="file-badge" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Unread Applications</div>
+                <div class="text-3xl font-bold {{ $stats['unread_applications'] > 0 ? 'text-rose-600' : 'text-slate-800' }} mt-1">{{ $stats['unread_applications'] }}</div>
+            </div>
+            @if($stats['unread_applications'] > 0)
+                <span class="absolute top-2 right-2 flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+                </span>
+            @endif
         </div>
 
         <!-- Unread Messages Card -->
@@ -172,6 +200,16 @@
                     <a href="{{ route('admin.services.create') }}" class="p-3 bg-slate-50 hover:bg-accent/10 border border-slate-100 hover:border-accent/30 rounded-lg flex flex-col items-center justify-center text-center gap-2 group transition-all">
                         <i data-lucide="folder-plus" class="w-6 h-6 text-slate-500 group-hover:text-accent"></i>
                         <span class="text-xs font-semibold text-slate-600 group-hover:text-[#0f2343]">Add Service</span>
+                    </a>
+
+                    <a href="{{ route('admin.careers.create') }}" class="p-3 bg-slate-50 hover:bg-accent/10 border border-slate-100 hover:border-accent/30 rounded-lg flex flex-col items-center justify-center text-center gap-2 group transition-all">
+                        <i data-lucide="clipboard-list" class="w-6 h-6 text-slate-500 group-hover:text-accent"></i>
+                        <span class="text-xs font-semibold text-slate-600 group-hover:text-[#0f2343]">Post a Job</span>
+                    </a>
+
+                    <a href="{{ route('admin.applications.index') }}" class="p-3 bg-slate-50 hover:bg-accent/10 border border-slate-100 hover:border-accent/30 rounded-lg flex flex-col items-center justify-center text-center gap-2 group transition-all">
+                        <i data-lucide="file-badge" class="w-6 h-6 text-slate-500 group-hover:text-accent"></i>
+                        <span class="text-xs font-semibold text-slate-600 group-hover:text-[#0f2343]">Applications</span>
                     </a>
 
                     <a href="{{ route('admin.team.create') }}" class="p-3 bg-slate-50 hover:bg-accent/10 border border-slate-100 hover:border-accent/30 rounded-lg flex flex-col items-center justify-center text-center gap-2 group transition-all">

@@ -11,6 +11,7 @@
         ['name' => 'Projects', 'route' => 'projects'],
         ['name' => 'Certifications', 'route' => 'certifications'],
         ['name' => 'Our Team', 'route' => 'team'],
+        ['name' => 'Careers', 'route' => 'careers'],
         ['name' => 'Contact', 'route' => 'contact'],
     ];
 @endphp

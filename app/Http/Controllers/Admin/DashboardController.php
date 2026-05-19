@@ -9,6 +9,8 @@ use App\Models\Testimonial;
 use App\Models\TeamMember;
 use App\Models\Certification;
 use App\Models\ContactSubmission;
+use App\Models\JobOpening;
+use App\Models\JobApplication;
 
 class DashboardController extends Controller
 {
@@ -21,6 +23,8 @@ class DashboardController extends Controller
             'team_members' => TeamMember::count(),
             'certifications' => Certification::count(),
             'unread_messages' => ContactSubmission::where('status', 'new')->count(),
+            'job_openings' => JobOpening::count(),
+            'unread_applications' => JobApplication::where('status', 'new')->count(),
         ];
 
         $recentSubmissions = ContactSubmission::orderBy('created_at', 'desc')->take(5)->get();

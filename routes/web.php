@@ -22,6 +22,8 @@ use App\Http\Controllers\Admin\ContactSubmissionController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\SectorController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\CareerController;
+use App\Http\Controllers\Admin\JobApplicationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -101,6 +103,43 @@ Route::post('/contact', function (Request $request) {
     ]);
 });
 
+// Dedicated Careers Page
+Route::get('/careers', function () {
+    $jobs = \App\Models\JobOpening::where('is_active', 1)->orderBy('sort_order')->get();
+    return view('pages.careers', compact('jobs'));
+})->name('careers');
+
+// Front-end Careers Form AJAX Endpoint
+Route::post('/careers/apply', function (Request $request) {
+    $validated = $request->validate([
+        'job_opening_id' => ['nullable', 'exists:job_openings,id'],
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'email', 'max:255'],
+        'phone' => ['required', 'string', 'max:255'],
+        'resume' => ['required', 'file', 'mimes:pdf,doc,docx', 'max:5120'], // Max 5MB
+        'cover_letter' => ['nullable', 'string'],
+    ]);
+
+    if ($request->hasFile('resume')) {
+        $file = $request->file('resume');
+        $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+        
+        if (!\Illuminate\Support\Facades\File::exists(public_path('uploads/resumes'))) {
+            \Illuminate\Support\Facades\File::makeDirectory(public_path('uploads/resumes'), 0755, true);
+        }
+        
+        $file->move(public_path('uploads/resumes'), $filename);
+        $validated['resume'] = '/uploads/resumes/' . $filename;
+    }
+
+    \App\Models\JobApplication::create($validated);
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Your application has been submitted successfully! Our HR team will review it and get back to you.'
+    ]);
+})->name('careers.apply');
+
 /*
 |--------------------------------------------------------------------------
 | Admin Auth & Management Routes
@@ -134,6 +173,11 @@ Route::prefix('admin')->group(function () {
         
         // Inbox/Contact Submissions
         Route::resource('contact', ContactSubmissionController::class, ['as' => 'admin'])->only(['index', 'show', 'destroy']);
+
+        // Careers & Applications Management
+        Route::resource('careers', CareerController::class, ['as' => 'admin'])->except(['show']);
+        Route::put('applications/{application}/status', [JobApplicationController::class, 'updateStatus'])->name('admin.applications.status');
+        Route::resource('applications', JobApplicationController::class, ['as' => 'admin'])->only(['index', 'show', 'destroy']);
 
         // Company About Us Settings
         Route::get('settings', [SettingController::class, 'edit'])->name('admin.settings.edit');
