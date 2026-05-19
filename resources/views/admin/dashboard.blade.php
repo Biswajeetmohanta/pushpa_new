@@ -20,7 +20,7 @@
     </div>
 
     <!-- Quick Stats Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- Projects Card -->
         <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex items-center gap-5 hover:shadow-md transition-shadow">
             <div class="w-12 h-12 rounded-lg bg-blue-50 text-[#0f2343] flex items-center justify-center flex-shrink-0 border border-blue-100">
